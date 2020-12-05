@@ -2,7 +2,7 @@ import { Model } from "./Models";
 import { Attributes } from "./Attributes";
 import { ApiSync } from "./Sync";
 import { Eventing } from "./Eventing";
-
+import { Collection } from "./Collections";
 export interface UserProps {
   id?: number;
   name?: string;
@@ -20,7 +20,14 @@ export class User extends Model<UserProps> {
     );
   }
 
-  isAdminUser(): boolean {
-    return this.get("id") === 1;
+  static buildUserCollection(): Collection<User, UserProps> {
+    return new Collection<User, UserProps>(rootUrl, (json: UserProps) =>
+      User.buildUser(json)
+    );
+  }
+
+  setRandomAge(): void {
+    const age = Math.round(Math.random() * 100);
+    this.set({ age: age });
   }
 }
